@@ -1,0 +1,43 @@
+ #
+ #  This is a license template.
+ #  
+ #  Some variables:
+ #  - File: configmap.yaml [the file the license is inserted to]
+ #  - Path: /home/rohit/Project/k8/httpsservice/chart/templates/configmap.yaml [the path to the file]
+ #  - CurrentYear: 2020 [the current year]
+ #  - CurrentMonth: 3 [the current month]
+ #  - CurrentDay: 3 [the current day]
+ #  - CreationYear: 2020 [the year the file was created]
+ #  - CreationMonth: 3 [the month the file was created]
+ #  - CreationDay: 3 [the day the file was created]
+ #  - Date: Wed Apr 22 2020 [the current date]
+ #  - Username: rohit [the name of the current user logged in]
+ #  - CopyrightYear: 2020 [the year that should be used for copyright notices]
+ #  
+ #  Note: You can use environment variables with: %(#ENVIRONMENT_VAR).
+ #
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginxconfigmap
+data:
+  default.conf: |-
+    server {
+      listen 80 default_server;
+      listen [::]:80 default_server ipv6only=on;
+
+      listen 443 ssl;
+
+      root /usr/share/nginx/html;
+      index index.html;
+
+      server_name localhost;
+      ssl_certificate /etc/nginx/ssl/tls.crt;
+      ssl_certificate_key /etc/nginx/ssl/tls.key;
+
+      location / {
+              try_files $uri $uri/ =404;
+      }
+    }
+

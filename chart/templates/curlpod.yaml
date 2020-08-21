@@ -1,0 +1,47 @@
+ #
+ #  This is a license template.
+ #  
+ #  Some variables:
+ #  - File: curlpod.yaml [the file the license is inserted to]
+ #  - Path: /home/rohit/Project/k8/httpsservice/chart/templates/curlpod.yaml [the path to the file]
+ #  - CurrentYear: 2020 [the current year]
+ #  - CurrentMonth: 3 [the current month]
+ #  - CurrentDay: 3 [the current day]
+ #  - CreationYear: 2020 [the year the file was created]
+ #  - CreationMonth: 3 [the month the file was created]
+ #  - CreationDay: 3 [the day the file was created]
+ #  - Date: Wed Apr 22 2020 [the current date]
+ #  - Username: rohit [the name of the current user logged in]
+ #  - CopyrightYear: 2020 [the year that should be used for copyright notices]
+ #  
+ #  Note: You can use environment variables with: %(#ENVIRONMENT_VAR).
+ #
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curl-deployment
+spec:
+  selector:
+    matchLabels:
+      app: curlpod
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: curlpod
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: nginxsecret
+      containers:
+      - name: curlpod
+        command:
+        - sh
+        - -c
+        - while true; do sleep 1; done
+        image: radial/busyboxplus:curl
+        volumeMounts:
+        - mountPath: /etc/nginx/ssl
+          name: secret-volume

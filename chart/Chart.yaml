@@ -1,0 +1,23 @@
+ #
+ #  This is a license template.
+ #  
+ #  Some variables:
+ #  - File: Chart.yaml [the file the license is inserted to]
+ #  - Path: /home/rohit/Project/k8/httpsservice/chart/Chart.yaml [the path to the file]
+ #  - CurrentYear: 2020 [the current year]
+ #  - CurrentMonth: 3 [the current month]
+ #  - CurrentDay: 3 [the current day]
+ #  - CreationYear: 2020 [the year the file was created]
+ #  - CreationMonth: 3 [the month the file was created]
+ #  - CreationDay: 3 [the day the file was created]
+ #  - Date: Wed Apr 22 2020 [the current date]
+ #  - Username: rohit [the name of the current user logged in]
+ #  - CopyrightYear: 2020 [the year that should be used for copyright notices]
+ #  
+ #  Note: You can use environment variables with: %(#ENVIRONMENT_VAR).
+ #
+
+apiVersion: v1
+description: https
+name: https
+version: 0.0.1  

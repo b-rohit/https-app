@@ -1,0 +1,95 @@
+ #
+ #  This is a license template.
+ #  
+ #  Some variables:
+ #  - File: nginx-secure-app.yaml [the file the license is inserted to]
+ #  - Path: /home/rohit/Project/k8/httpsservice/chart/templates/nginx-secure-app.yaml [the path to the file]
+ #  - CurrentYear: 2020 [the current year]
+ #  - CurrentMonth: 3 [the current month]
+ #  - CurrentDay: 3 [the current day]
+ #  - CreationYear: 2020 [the year the file was created]
+ #  - CreationMonth: 3 [the month the file was created]
+ #  - CreationDay: 3 [the day the file was created]
+ #  - Date: Wed Apr 22 2020 [the current date]
+ #  - Username: rohit [the name of the current user logged in]
+ #  - CopyrightYear: 2020 [the year that should be used for copyright notices]
+ #  
+ #  Note: You can use environment variables with: %(#ENVIRONMENT_VAR).
+ #
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: production
+spec:
+  selector:
+    matchLabels:
+      run: my-nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: my-nginx
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: nginxsecret
+      - name: configmap-volume
+        configMap:
+          name: nginxconfigmap
+      containers:
+      - name: nginxhttps
+        image: bprashanth/nginxhttps:1.0
+        ports:
+        - containerPort: 443
+        #- containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/ssl
+          name: secret-volume
+        - mountPath: /etc/nginx/conf.d
+          name: configmap-volume
+---          
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx
+  labels:
+    run: my-nginx
+spec:
+  type: ClusterIP
+  ports:
+  #- port: 80
+  #  targetPort: 80
+  #  protocol: TCP
+  #  name: http
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+    name: https
+  selector:
+    run: my-nginx
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    run: my-nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.allow-http: "false"
+  name: ingress
+spec:
+  tls:
+  - hosts:
+    - staging.vs-creator.iotcrawler.eu
+    secretName: vs-creator-tls
+  rules:
+  - host: staging.vs-creator.iotcrawler.eu
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: my-nginx
+          servicePort: 443
